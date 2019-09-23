@@ -1,0 +1,118 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{siunitx,pgfplots,fancyhdr,enumitem,tikz,xparse,listings,graphicx}
+
+\usepackage[colorlinks=true]{hyperref}
+
+\lstset{language=Matlab}
+
+%%Needed to properly display graphs
+\pgfplotsset{width=10cm,compat=1.9}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Steven Glasford}
+\chead{Homework 1}
+\rhead{Page \thepage}
+
+\title{Homework 2}
+\author{Steven Glasford}
+\date{\parbox{\linewidth}{\centering%
+    %%Adds the last compiled date
+    \today\endgraf\medskip
+    Numerical Analysis\endgraf\medskip
+    MATH-373}}
+
+%%Creates a new symbol for plus and minus together
+\newcommand{\rpm}{\sbox0{$1$}\sbox2{$\scriptstyle\pm$}
+  \raise\dimexpr(\ht0-\ht2)/2\relax\box2 }
+
+%%Creates a nice format for displaying the steps taken  
+\newlist{steps}{enumerate}{1}
+\setlist[steps, 1]{label = Step \arabic*:}
+
+\ExplSyntaxOn
+%%new command to round numbers
+\newcommand*{\prlen}[1]{%
+   % round to 1 digit:
+    \pgfmathparse{round(10)/10.0}%
+    %\pgfkeys{/pgf/number format/precision=1}
+    %\pgfmathresult
+    \pgfmathprintnumber[fixed, precision=2]{\pgfmathresult}
+}
+\ExplSyntaxOff
+
+% Set the listings programming language
+\lstset{language=Matlab}
+
+\begin{document}
+
+%% adds the title to the document
+\maketitle
+\pagebreak
+%\tableofcontents
+
+\section{Problem Statement}
+Consider a toy sailboat that will be constructed by hand out of concrete. the shape of the hull will be cylindrical in order to simplify the casting process by using a two-liter soda bottle. The \emph{freeboard}, $f$, of a boat is the distance from the surface of the water to the top of the hull, or the amount of the hull that sits above the water. The freeboard is directly related to the thickness, $t$, of the hull, through the principle of bouyancy, by $$\left\lbrack\frac{1}{2}\pi r^2 L - \frac{1}{2} \pi \left(r-t\right)^2\left(L-2t\right) \right\rbrack \gamma_{concrete} +0.2 = \frac{1}{2} r^2\left\lbrack2 \arccos{\left(\frac{f}{r}\right)} - \sin{\left(2\arccos{\left(\frac{f}{r}\right)}\right)}\right\rbrack L \gamma_{water}$$
+where $r$ is the radius of the outside of the cylindrical hull, $L$ is the length of the hull, $\gamma_{concrete}$ is the specific weight of concrete, and $\gamma_{water}$ is the specific weight of water. 
+\section{Solution}
+
+If $r = 2.15$ in, $L = 7.5$ in, $\gamma_{water}=2.4$ lbf/ft$^3$, and $\gamma_{concrete} = 140$ lbf/ft$^3$ 
+
+\subsection{An Array of Various Hull Thicknesses and Their Corresponding Free Board Sizes}
+\begin{center}
+    \begin{tabular}{c|c}
+         $t=\frac{1}{8}$&$.0847$  \\
+         $t=\frac{3}{16}$&$0.0618$ \\
+         $t=\frac{1}{4}$&$.0412$\\
+         $t=\frac{5}{16}$&$.0221$\\
+         $t=\frac{3}{8}$&$0.0044$
+    \end{tabular}
+\end{center}
+
+\subsection{Design Recommendations}
+If this was my sail boat I probably wouldn't really use the values from above, rather I would try switching the input values from t to f, 
+
+
+
+So in this case I would chose to build my boat with a $\frac{3}{16}$ inch hull because I feel like this size would provide a decent freeboard at .0618 feet, which would probably be enough to avoid tipping over or a wave from spilling the side.
+
+\subsection{Justifying the Aforementioned Array}
+
+\begin{center}
+    \begin{tabular}{|c|c|c|}
+        \hline
+         & \emph{Secant}&\emph{Bisection} \\
+         \hline
+          $t=\frac{1}{8}$&$0.0847$ & $0.0847$\\
+         $t=\frac{3}{16}$&$0.0618$&$0.0618$ \\
+         $t=\frac{1}{4}$&$0.0412$&$0.0412$\\
+         $t=\frac{5}{16}$&$0.0221$&$0.0221$\\
+         $t=\frac{3}{8}$&$0.0044$&$0.0044$\\
+         \hline
+    \end{tabular}
+\end{center}
+
+
+
+\section{Command-line Usage}
+One program was written to solve this problem, and the command-line usage is below.
+
+\begin{verbatim}
+>> hw2()
+\end{verbatim}
+
+\section{Code}
+
+A program was written to solve this problem, called \texttt{secant}, and the code can be found in Listing \ref{code:problem}.
+
+\lstinputlisting[caption={MATLAB code for the Newton Raphson problem.}, label={code:problem}, frame=tb]{hw2.m}
+
+\lstinputlisting[caption={MATLAB code for the Newton Raphson problem.}, label={code:newton}, frame=tb]{newton-raphson.m}
+
+\lstinputlisting[caption={MATLAB code for the secant problem.}, label={code:secant}, frame=tb]{secant.m}
+
+\lstinputlisting[caption={MATLAB code for the Modified Secant Problem}, label = {code:modSecant}, frame=tb]{secant-modified.m}
+
+\end{document}

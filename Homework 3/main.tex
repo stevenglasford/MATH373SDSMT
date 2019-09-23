@@ -1,0 +1,135 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{siunitx,pgfplots,fancyhdr,enumitem,tikz,xparse,listings,graphicx}
+\usepackage[T1]{fontenc}
+
+\usepackage[colorlinks=true]{hyperref}
+
+\lstset{language=Matlab}
+
+%%Needed to properly display graphs
+\pgfplotsset{width=10cm,compat=1.9}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Steven Glasford}
+\chead{Homework 3}
+\rhead{Page \thepage}
+
+\title{Homework 3}
+\author{Steven Glasford}
+\date{\parbox{\linewidth}{\centering%
+    %%Adds the last compiled date
+    \today\endgraf\medskip
+    Numerical Analysis\endgraf\medskip
+    MATH-373}}
+
+%%Creates a new symbol for plus and minus together
+\newcommand{\rpm}{\sbox0{$1$}\sbox2{$\scriptstyle\pm$}
+  \raise\dimexpr(\ht0-\ht2)/2\relax\box2 }
+
+%%Creates a nice format for displaying the steps taken  
+\newlist{steps}{enumerate}{1}
+\setlist[steps, 1]{label = Step \arabic*:}
+
+\ExplSyntaxOn
+%%new command to round numbers
+\newcommand*{\prlen}[1]{%
+   % round to 1 digit:
+    \pgfmathparse{round(10)/10.0}%
+    %\pgfkeys{/pgf/number format/precision=1}
+    %\pgfmathresult
+    \pgfmathprintnumber[fixed, precision=2]{\pgfmathresult}
+}
+\ExplSyntaxOff
+
+% Set the listings programming language
+\lstset{language=Matlab}
+
+\begin{document}
+
+%% adds the title to the document
+\maketitle
+\pagebreak
+%\tableofcontents
+
+\section{Problem Statement}
+The equation for the current, $i$, in a circuit with a resistor, capacitor, and inductor is given by 
+$$\frac{i}{i_0} = e^{-Rt/(2L)} \cos{\left( t \sqrt{\frac{1}{LC} - \left(\frac{R}{2L} \right)^2}\right)},$$ where $i_0$ 
+is the initial current in the circuit, $R$ is the resistance in the circuit, $L$ is the inductance in the circuit, $C$ is the capacitance in the circuit, and $t$ is the duration of the discharge.  Overall, the charge stored in the capacitor drives the current through the circuit, while the resistor and inductor dissipate the current.
+
+Determine the half-lie of the current (i.e., the time until $i/i_0 = 0.5$) if $R = 100$ \si{\ohm}, $L = 5$ \si{\henry}, and $C = 10^{-4}$ \si{\farad} using IQI and the MATLAB command \texttt{fzero}.  Report the outputs for the two methods in a properly formatted table.  You do not need to include a plot for this report, but if you do not include a plot, then make sure you address how you determined an interval or initial guesses for your methods.  This solution must be typeset using \LaTeX\ and a hard copy should be submitted in class.  Be sure to follow the template for homework on the course website.
+
+\section{Solution}
+
+Replacing all of the variables in the function from above with the constants given and solving the equation for zero results in the following function and graph \ref{fig:function}:
+
+
+$$0 = e^{-100t/(2\cdot 5)} \cos{\left( t \sqrt{\frac{1}{5\cdot 10^{-4}} - \left(\frac{100}{2\cdot 5} \right)^2}\right)} - 0.5,$$
+
+or simplified:
+
+$$0 = e^{-10t} \cos{\left(  10\cdot\sqrt{19}t\right)} - 0.5$$
+
+\bigskip
+
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = left,
+    xlabel = $x$,
+    ylabel = {$f(x)$},
+    scaled ticks = false,
+    tick label style = {/pgf/number format/fixed},
+]
+%Below the red parabola is defined
+\addplot [
+    domain=0:.04, 
+    samples=100, 
+    color=red,
+]
+{exp(-10*x)*cos(deg(x*sqrt(1900)))-.5};
+\addlegendentry{$e^{-10t} \cos{\left(  10\cdot\sqrt{19}t\right)} - 0.5$}
+
+\draw[ultra thin] (axis cs:\pgfkeysvalueof{/pgfplots/xmin},0) -- (axis cs:\pgfkeysvalueof{/pgfplots/xmax},0);
+
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+
+
+We can see that the function has a root somewhere between 0 and 0.04, so we can set the bounds of the \texttt{fzero} function to $[0,0.04]$, and it be logical to set the guesses for the \texttt{IQI} function to $[0,0.02,0.04]$.
+
+\begin{center}
+\verb|func = @(t) exp(-10*x)*cos(x*sqrt(1900));|
+\end{center}
+
+\begin{center}
+    \begin{tabular}{c|c|c}
+        & \texttt{IQI(func,0,.02,.04)} & \texttt{fzero(func,[0,.04])}\\
+        \hline
+        \texttt{x\_root} & 0.0208 & 0.0208 \\
+        \texttt{func\_val} & $\num{7.2276e-14}$ \\
+        \texttt{error\_approx} & $\num{4.7841e-05}$ \\
+        \texttt{num\_iterations} & 4
+        
+    \end{tabular}
+\end{center} 
+
+\section{Command-line Usage}
+The graph for this document was produced natively inside latex. And the data for the table was produced in a MATLAB file called \texttt{hw.m}, the code for which can be found in Listing \ref{code:hw3}. The code for IQI can be found in Listing \ref{code:iqi}.
+
+\begin{verbatim}
+>> hw3()
+\end{verbatim}
+
+\section{Code}
+
+\lstinputlisting[caption={MATLAB Code to Solve the Problem}, label = {code:hw3}, frame=tb]{h3.m}
+
+\lstinputlisting[caption={MATLAB Code for IQI}, label = {code:iqi},frame=tb]{IQI.m}
+
+\end{document}

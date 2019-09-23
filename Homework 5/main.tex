@@ -1,0 +1,131 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{siunitx,pgfplots,fancyhdr,enumitem,tikz,xparse,listings,graphicx,float}
+\usepackage[T1]{fontenc}
+
+\usepackage[colorlinks=true]{hyperref}
+
+\lstset{language=Matlab}
+
+%%Needed to properly display graphs
+\pgfplotsset{width=10cm,compat=1.9}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Steven Glasford}
+\chead{Homework 5}
+\rhead{Page \thepage}
+
+\title{Homework 5}
+\author{Steven Glasford}
+\date{\parbox{\linewidth}{\centering%
+    %%Adds the last compiled date
+    \today\endgraf\medskip
+    Numerical Analysis\endgraf\medskip
+    MATH-373}}
+
+%%Creates a new symbol for plus and minus together
+\newcommand{\rpm}{\sbox0{$1$}\sbox2{$\scriptstyle\pm$}
+  \raise\dimexpr(\ht0-\ht2)/2\relax\box2 }
+
+%%Creates a nice format for displaying the steps taken  
+\newlist{steps}{enumerate}{1}
+\setlist[steps, 1]{label = Step \arabic*:}
+
+\ExplSyntaxOn
+%%new command to round numbers
+\newcommand*{\prlen}[1]{%
+   % round to 1 digit:
+    \pgfmathparse{round(10)/10.0}%
+    %\pgfkeys{/pgf/number format/precision=1}
+    %\pgfmathresult
+    \pgfmathprintnumber[fixed, precision=2]{\pgfmathresult}
+}
+\ExplSyntaxOff
+
+% Set the listings programming language
+\lstset{language=Matlab}
+
+\begin{document}
+
+%% adds the title to the document
+\maketitle
+\pagebreak
+%\tableofcontents
+
+\section{Problem Statement}
+
+    The force on a sailboat mast can be represented by the following function: 
+    $$f(z) = 200\left(\frac{z}{5+z}\right)e^{-2z/H}$$ 
+    where $z=$ the elevation above the deck and $H=$ the height of the mast. The total force $F$ exerted on the mast can be determined by integrating this function over the height of the mast: 
+    $$F = \int_{0}^{H} f(z) dz$$
+    The line of action can also be determined by integration: 
+    $$d = \frac{\int_{0}^{H} z f(z) dz}{\int_{0}^{H} f(z) dz}$$
+    Solve using the following methods where $H=30$ feet:
+    
+	\begin{enumerate}
+	
+	\item\label{part1}  Use Romberg integration to find both $F$ and $d$.
+	
+	\item\label{part2}  Use Gauss Quadrature with four points to find both $F$ and $d$.
+	
+	\item\label{part3}  Use Gauss Quadrature with five points to find both $F$ and $d$.
+	
+	\item\label{part4}  Use Adaptive Quadrature to find both $F$ and $d$. 
+	
+	\end{enumerate}
+    Assume that units for $H$ are in feet.  This solution must be typeset using \LaTeX\ and a hard copy should be submitted in class.  Be sure to follow the template for homework found elsewhere.
+
+
+\section{Solution}
+
+\begin{table}[H]
+    \label{tab:solution}
+    \caption{Solutions for $F$, and $d$ as computed by various numerical methods}
+\begin{center}
+\begin{tabular}{|c||c||c|}
+     \hline
+     Problem&$F$&$d$  \\
+     \hline \hline
+     \begin{flushleft} \ref{part1}: Romberg\end{flushleft} & $\num{1.4806e3}$ & 13.0537 \\
+     \hline
+     \begin{flushleft} \ref{part2}: Gauss Quadrature (4 points) \end{flushleft}& $\num{1.4868e3}$ & 12.9778 \\
+     \hline
+     \begin{flushleft} \ref{part3}: Gauss Quadrature (5 points)\end{flushleft} & $\num{1.4819e3}$ & 13.0379\\
+     \hline
+     \begin{flushleft} \ref{part4}: Adaptive Quadrature\end{flushleft} & $\num{1.4806e3}$ & 13.0537\\
+     \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+\medskip
+
+The code used to calculate Romberg can be found in Code \ref{code:romberg}.\\
+The code used to calculate Gauss Quadrature can be found in Code \ref{code:gauss}.\\
+The code used to calculate Adaptive Quadrature can be found in Code \ref{code:step} and \ref{code:adapt}.
+
+
+
+\section{Command-line Usage}
+One program was written to produce the values found in Table \ref{tab:solution}, the code for this program can be found in Code \ref{code:hw5} and is ran as follows: 
+
+\begin{verbatim}
+>> [RombergF,Rombergd,Gauss4F,Gauss4d,Gauss5F,Gauss5d,AdaptF,Adaptd] = hw5()
+\end{verbatim}
+
+\section{Code}
+
+\lstinputlisting[caption={MATLAB Code \texttt{hw5.m}}, label = {code:hw5},frame=tb]{hw5.m}
+
+\lstinputlisting[caption={MATLAB Code \texttt{romberg.m}}, label = {code:romberg},frame=tb]{romberg.m}
+
+\lstinputlisting[caption={MATLAB Code \texttt{gauss\_quad.m}}, label = {code:gauss},frame=tb]{gauss_quad.m}
+
+\lstinputlisting[caption={MATLAB Code \texttt{quad\_step.m}}, label = {code:step},frame=tb]{quad_step.m}
+
+\lstinputlisting[caption={MATLAB Code \texttt{quad\_adapt.m}}, label = {code:adapt},frame=tb]{quad_adapt.m}
+
+\end{document}
