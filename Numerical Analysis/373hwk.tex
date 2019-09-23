@@ -1,0 +1,51 @@
+\documentclass[11pt]{article}
+
+% Load packages
+\usepackage[margin=1in]{geometry}  % defines a 1'' margins
+\usepackage{listings}  % used to include code
+\usepackage{graphicx}  % used to include images
+\usepackage{siunitx} % used to typeset units
+%\usepackage[colorlinks=true]{hyperref}  % used to create hyperlinks
+
+% User-defined commands
+\newcommand{\HWKtitle}[4]{\begin{center}
+\textbf{#1\\Homework #2\\Assigned: #3\\Due: #4}
+\end{center}\medskip\hrule\bigskip}
+
+% User-defined commands
+\newcommand{\PROJtitle}[4]{\begin{center}
+\textbf{#1\\Project #2\\Assigned: #3\\Due: #4}
+\end{center}\medskip\hrule\bigskip}
+
+\begin{document}
+
+\HWKtitle{MATH 373 Numerical Analysis}{\#1}{January 24, 2018}{February 2, 2018}
+
+\begin{enumerate}
+
+\item  Develop an M-file for the Bisection Method.  Command-line usage is
+
+	\texttt{[root,func\_val,error\_approx,num\_iterations] = \\bisection(func,x\_min,x\_max,error\_desired,max\_iterations)}
+	
+	Program the default values \texttt{error\_desired = 0.0001} and \texttt{max\_iterations = 50}.  Generate errors if $x_{min} \geq x_{max}$ or if there is no sign change over the interval.  Be sure to follow the template on the website for your code.  Your code should be submitted on the MCS website using the \textbf{Submit It!} feature.
+
+\item  Develop an M-file for the False Position Method.  You will need to read \S 5.5 in order to understand this method.  Command-line usage is
+
+	\texttt{[root,func\_val,error\_approx,num\_iterations] = \\ false\_position(func,x\_min,x\_max,error\_desired,max\_iterations)}
+	
+	Program the default values \texttt{error\_desired = 0.0001} and \texttt{max\_iterations = 50}.  Generate errors if $x_{min} \geq x_{max}$ or if there is no sign change over the interval.  Be sure to follow the template on the website for your code.  Your code should be submitted on the MCS website using the \textbf{Submit It!} feature.
+	
+\item  The secant formula, used to calculate the load that a column can withstand before buckling, is given by $$\sigma_{max} = \frac{P}{A} \left[ 1 + \varepsilon_r \sec{\left( \left( \frac{L}{2k}\right) \sqrt{\frac{P}{EA}} \right)}\right].$$  If $\sigma_{max} = 200,000$ \si{MPa/m^2} is the maximum stress for the material used to make the column, $\varepsilon_r = 0.25$ is the eccentricity ratio, $E = 150,000$ \si{MPa} is the modulus of elasticity, and $L/k=30$ is the slenderness ratio, then determine the smallest stress, $P/A$, that satisfies the secant formula.  I recommend using \si{MPa} as your units, instead of Pascals, as a way of keeping the numbers smaller.  Also, you will probably need to graph this problem in order to determine where the roots are.  Finding an interval with a sign change does take a bit of thought.
+
+Use both Bisection and False Position to solve this problem.  Report the outputs for the two methods in a properly formatted table.  You do not need to include a plot for this report, but if you do not include a plot, then make sure you address how you determined an interval for your methods.  This solution must be typeset using \LaTeX\ and a hard copy should be submitted in class.  Be sure to follow the template for homework on the course website.
+
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\pagebreak
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+
